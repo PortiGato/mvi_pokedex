@@ -24,6 +24,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,14 +37,21 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.mvi_pokedex.R
 import com.example.mvi_pokedex.domain.model.CardItem
 import com.example.mvi_pokedex.ui.navigation.AppScreens
 
 
+
 @Composable
 fun HomeScreen(navController: NavHostController) {
+
+    val viewModel: HomeViewModel = hiltViewModel()
+    val state by viewModel.state.collectAsState()
+    val uiAction by viewModel.actions.collectAsState(null)
+
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -51,12 +59,12 @@ fun HomeScreen(navController: NavHostController) {
     ) {
         SearchBar()
         Spacer(modifier = Modifier.height(8.dp))
-        CardList(navController)
+        CardList(navController,state)
     }
 }
 
 @Composable
-fun CardList(navController: NavHostController) {
+fun CardList(navController: NavHostController,state: HomeContract.HomeScreenState) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = Modifier
@@ -64,11 +72,7 @@ fun CardList(navController: NavHostController) {
             .background(Color.LightGray)
     ) {
 
-        val items = listOf(
-            CardItem("Title 1", "Subtitle 1", R.drawable.ic_launcher_background),
-            CardItem("Title 2", "Subtitle 2", R.drawable.ic_launcher_background),
-            CardItem("Title 3", "Subtitle 3", R.drawable.ic_launcher_background)
-        )
+        val items = state.cardItem
 
         items(items) { item ->
             CardItemView(item,navController)

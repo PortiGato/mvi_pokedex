@@ -1,6 +1,8 @@
 [versions]
 agp = "8.4.0"
 hiltVersion = "2.50"
+hiltNavigationCompose = "1.0.0"
+lifecycleViewmodelCompose = "2.5.1"
 ksp = "1.9.0-1.0.11"
 kotlin = "1.9.0"
 coreKtx = "1.13.1"
@@ -14,10 +16,13 @@ navigationCompose = "2.7.7"
 compose = "1.6.7"
 icons = "1.6.7"
 
+
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltVersion" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltVersion" }
+hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
+lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
