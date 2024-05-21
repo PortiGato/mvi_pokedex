@@ -30,7 +30,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -40,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.mvi_pokedex.R
 import com.example.mvi_pokedex.domain.model.CardItem
+import com.example.mvi_pokedex.ui.navigation.AppScreens
 
 
 @Composable
@@ -51,12 +51,12 @@ fun HomeScreen(navController: NavHostController) {
     ) {
         SearchBar()
         Spacer(modifier = Modifier.height(8.dp))
-        CardList()
+        CardList(navController)
     }
 }
 
 @Composable
-fun CardList() {
+fun CardList(navController: NavHostController) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = Modifier
@@ -71,19 +71,22 @@ fun CardList() {
         )
 
         items(items) { item ->
-            CardItemView(item)
+            CardItemView(item,navController)
         }
     }
 }
 
 @Composable
-fun CardItemView(item: CardItem) {
+fun CardItemView(item: CardItem, navController: NavHostController,) {
     val context = LocalContext.current
     Card(
         modifier = Modifier
             .padding(8.dp)
             .fillMaxWidth()
-            .clickable { showPositionToast(context,item.title) },
+            .clickable {
+                showPositionToast(context, item.title)
+                navController.navigate(AppScreens.DetailScreen.createRoute(item.title))
+            },
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
         Row(

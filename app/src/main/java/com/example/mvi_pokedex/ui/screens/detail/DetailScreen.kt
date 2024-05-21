@@ -11,12 +11,12 @@ import androidx.navigation.NavHostController
 
 
 @Composable
-fun HomeScreen(navController: NavHostController) {
+fun DetailScreen(navController: NavHostController,pokemonId: String) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "hola")
+        Text(text = pokemonId)
     }
 }
