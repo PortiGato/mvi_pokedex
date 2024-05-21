@@ -77,9 +77,10 @@ dependencies {
 
     //Dagger Hilt
     implementation(libs.hilt.android)
-    //implementation(libs.hilt.android.compiler)
     kapt(libs.hilt.android.compiler)
 
+    //Icons
+    implementation(libs.material.icons.extended)
 }
 
 kapt {
