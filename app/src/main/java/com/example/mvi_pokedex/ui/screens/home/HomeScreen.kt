@@ -41,6 +41,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.mvi_pokedex.R
 import com.example.mvi_pokedex.domain.model.CardItem
+import com.example.mvi_pokedex.domain.model.Pokemon
 import com.example.mvi_pokedex.ui.navigation.AppScreens
 
 
@@ -81,15 +82,15 @@ fun CardList(navController: NavHostController,state: HomeContract.HomeScreenStat
 }
 
 @Composable
-fun CardItemView(item: CardItem, navController: NavHostController,) {
+fun CardItemView(item: Pokemon, navController: NavHostController,) {
     val context = LocalContext.current
     Card(
         modifier = Modifier
             .padding(8.dp)
             .fillMaxWidth()
             .clickable {
-                showPositionToast(context, item.title)
-                navController.navigate(AppScreens.DetailScreen.createRoute(item.title))
+                showPositionToast(context, item.name)
+                navController.navigate(AppScreens.DetailScreen.createRoute(item.name))
             },
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
@@ -98,7 +99,7 @@ fun CardItemView(item: CardItem, navController: NavHostController,) {
                 .padding(16.dp)
         ) {
             Image(
-                painter = painterResource(id = item.imageRes),
+                painter = painterResource(id = R.drawable.ic_launcher_background),
                 contentDescription = null,
                 modifier = Modifier
                     .size(64.dp)
@@ -110,10 +111,7 @@ fun CardItemView(item: CardItem, navController: NavHostController,) {
                     .fillMaxWidth()
             ) {
                 Text(
-                    text = item.title
-                )
-                Text(
-                    text = item.subtitle
+                    text = item.name
                 )
             }
         }

@@ -81,6 +81,13 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
     implementation(libs.lifecycle.viewmodel.compose)
 
+    //Retrofit
+    implementation(libs.squareup.retrofit2)
+    implementation(libs.google.code.gson)
+    implementation(libs.squareup.okhttp3)
+    implementation(libs.squareup.okhttp3.logging.interceptor)
+
+
     //Icons
     implementation(libs.material.icons.extended)
 }
