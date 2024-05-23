@@ -1,6 +1,8 @@
 package com.example.mvi_pokedex.data.network.repository
 
+import com.example.mvi_pokedex.data.network.response.PokemonDetailResponse
 import com.example.mvi_pokedex.data.network.response.PokemonListResponse
+import com.example.mvi_pokedex.data.network.service.PokemonDetailService
 import com.example.mvi_pokedex.data.network.service.PokemonListService
 import com.example.mvi_pokedex.utils.Constants
 import dagger.Module
@@ -11,17 +13,17 @@ import javax.inject.Inject
 
 @Module
 @InstallIn(SingletonComponent::class)
-class PokemonListRepository @Inject constructor(
-    var pokemonListService: PokemonListService
+class PokemonDetailRepository @Inject constructor(
+    var pokemonDetailService: PokemonDetailService
 ) {
 
-    ////ONLINE SERVICE
+    //ONLINE SERVICE
 
-    suspend fun getPokemonList(
-        limit: Int = Constants.NUM_POKEMONS, offset: Int = Constants.FIRST_POKEMON
-    ): Result<PokemonListResponse> {
+    suspend fun getPokemonDetail(
+        id: String
+    ): Result<PokemonDetailResponse> {
 
-        val response = pokemonListService.getPokemonList(limit,offset)
+        val response = pokemonDetailService.getPokemonDetail(id)
         return if (response != null) {
             Result.success(response)
         } else {

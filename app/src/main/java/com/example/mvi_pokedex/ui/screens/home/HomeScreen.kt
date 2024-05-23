@@ -1,9 +1,11 @@
 package com.example.mvi_pokedex.ui.screens.home
 
-import android.widget.Toast
+import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -36,7 +38,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
@@ -44,7 +48,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import coil.ImageLoader
 import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
+import coil.request.ImageRequest
 import com.example.mvi_pokedex.R
 import com.example.mvi_pokedex.domain.model.Pokemon
 import com.example.mvi_pokedex.ui.navigation.AppScreens
@@ -130,14 +137,12 @@ fun CardList(navController: NavHostController, pokemonList: List<Pokemon>) {
 
 @Composable
 fun CardItemView(item: Pokemon, navController: NavHostController) {
-    val context = LocalContext.current
     Card(
         modifier = Modifier
             .padding(8.dp)
             .fillMaxWidth()
             .clickable {
-                showPositionToast(context, item.name)
-                navController.navigate(AppScreens.DetailScreen.createRoute(item.name))
+                navController.navigate(AppScreens.DetailScreen.createRoute(item.id))
             },
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
@@ -175,22 +180,18 @@ fun CardItemView(item: Pokemon, navController: NavHostController) {
 @Composable
 fun PokemonImage(imageURL: String) {
     AsyncImage(
-        model = imageURL,
+        model = ImageRequest.Builder(LocalContext.current)
+            .data(imageURL)
+            .crossfade(500)
+            .build(),
         stringResource(id = R.string.pokemon_name),
         modifier = Modifier
             .size(100.dp)
             .clip(CircleShape)
             //.background(Color.Gray.copy(alpha = 0.1f))
-            .padding(8.dp)
-    )
-}
-
-fun showPositionToast(context: android.content.Context, title: String) {
-    Toast.makeText(
-        context,
-        "Clicked on $title",
-        Toast.LENGTH_SHORT
-    ).show()
+            .padding(8.dp),
+        error = painterResource(R.drawable.pokebola),
+        placeholder = painterResource(R.drawable.pokebola))
 }
 
 

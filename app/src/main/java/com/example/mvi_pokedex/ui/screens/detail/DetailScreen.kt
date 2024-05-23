@@ -19,7 +19,7 @@ import androidx.navigation.NavHostController
 
 
 @Composable
-fun DetailScreen(navController: NavHostController,pokemonId: String) {
+fun DetailScreen(navController: NavHostController,pokemonId: Int) {
     Column(
         modifier = Modifier.fillMaxSize(),
     ) {
@@ -40,7 +40,7 @@ fun DetailScreen(navController: NavHostController,pokemonId: String) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = pokemonId)
+            Text(text = pokemonId.toString())
         }
     }
 }

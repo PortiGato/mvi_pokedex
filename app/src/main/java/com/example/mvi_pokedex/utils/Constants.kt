@@ -7,5 +7,6 @@ object Constants {
     const val NUM_POKEMONS = 151
     const val FIRST_POKEMON = 0
     const val TIMEOUT = 60L
+    const val POKEMON_ID = "POKEMON_ID"
 }
 

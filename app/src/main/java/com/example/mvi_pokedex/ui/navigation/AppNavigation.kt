@@ -8,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.mvi_pokedex.ui.screens.detail.DetailScreen
 import com.example.mvi_pokedex.ui.screens.home.HomeScreen
+import com.example.mvi_pokedex.utils.Constants.POKEMON_ID
 
 
 @Composable
@@ -22,9 +23,9 @@ fun AppNavigation() {
         }
 
         composable(route = AppScreens.DetailScreen.route,
-            arguments = listOf(navArgument("pokemonID") { type =NavType.StringType} )
+            arguments = listOf(navArgument(POKEMON_ID) { type =NavType.IntType} )
         ){
-            DetailScreen(navController,it.arguments?.getString("pokemonID") ?: "")
+            DetailScreen(navController,it.arguments?.getInt(POKEMON_ID) ?:-1)
         }
 
     }
