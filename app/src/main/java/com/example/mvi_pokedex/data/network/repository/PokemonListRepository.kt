@@ -1,10 +1,8 @@
 package com.example.mvi_pokedex.data.network.repository
 
-import com.example.mvi_pokedex.data.network.response.PokemonResponse
 import com.example.mvi_pokedex.data.network.response.PokemonListResponse
 import com.example.mvi_pokedex.data.network.service.PokemonListService
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import com.example.mvi_pokedex.utils.Constants
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
@@ -37,7 +35,7 @@ class PokemonListRepository @Inject constructor(
 
 
     suspend fun getPokemonListOnline(
-        limit: Int = 20,offset: Int = 20
+        limit: Int = Constants.NUM_POKEMONS, offset: Int = Constants.FIRST_POKEMON
     ): Result<PokemonListResponse> {
 
         val response = pokemonListService.getPokemonList(limit,offset)

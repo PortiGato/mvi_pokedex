@@ -74,7 +74,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-
     //Dagger Hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
@@ -87,9 +86,12 @@ dependencies {
     implementation(libs.squareup.okhttp3)
     implementation(libs.squareup.okhttp3.logging.interceptor)
 
-
     //Icons
     implementation(libs.material.icons.extended)
+
+    //Coil
+    implementation(libs.coil.compose)
+
 }
 
 kapt {

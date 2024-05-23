@@ -1,8 +1,6 @@
 package com.example.mvi_pokedex.ui.screens.home
 
 import androidx.lifecycle.viewModelScope
-import com.example.mvi_pokedex.R
-import com.example.mvi_pokedex.domain.model.CardItem
 import com.example.mvi_pokedex.domain.useCase.GetPokemonListUsecase
 import com.example.mvi_pokedex.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,21 +16,16 @@ class HomeViewModel @Inject constructor(
     //State of view
     override val initialViewState = HomeContract.HomeScreenState()
 
-    val items = listOf(
-        CardItem("Title 1", "Subtitle 1", R.drawable.ic_launcher_background),
-        CardItem("Title 2", "Subtitle 2", R.drawable.ic_launcher_background),
-        CardItem("Title 3", "Subtitle 3", R.drawable.ic_launcher_background)
-    )
-
     //init function, get data from local database and sync with remote database
     init {
-        //setState { copy(cardItem= items) }
+
         viewModelScope.launch() {
+            setState { copy(isLoading = true) }
             val resultPokemonList = getPokemonListUsecase()
             if (resultPokemonList.isSuccess) {
                 setState {
                     copy(
-                        cardItem = resultPokemonList.getOrNull().orEmpty(),
+                        pokemonList = resultPokemonList.getOrNull().orEmpty(),
                         isLoading = false
                     )
                 }
@@ -61,8 +54,8 @@ class HomeViewModel @Inject constructor(
                 setState { copy(isShowAddDialog = false) }
             }
 
-            is HomeContract.HomeScreenUiEvent.ShowCardItems -> {
-                setState { copy(cardItem = event.cardItem) }
+            is HomeContract.HomeScreenUiEvent.ShowPokemonFilterItems -> {
+                setState { copy(pokemonFilterList = event.pokemonFilterList) }
             }
 
         }

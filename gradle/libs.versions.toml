@@ -17,11 +17,14 @@ compose = "1.6.7"
 icons = "1.6.7"
 retrofit2 = "2.9.0"
 gson = "2.10.1"
-okHttp = "4.11.0"
+okHttp = "4.12.0"
+coil = "2.5.0"
 
 
 [libraries]
-androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+
+#COIL
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 
 #DAGGER
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltVersion" }
@@ -35,6 +38,10 @@ google-code-gson = { module = "com.google.code.gson:gson", version.ref = "gson" 
 squareup-okhttp3 = { module = "com.squareup.okhttp3:okhttp", version.ref = "okHttp" }
 squareup-okhttp3-logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okHttp" }
 
+#ICONS
+material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "icons" }
+
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -49,8 +56,7 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
-#ICONS
-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "icons" }
+
 
 
 
