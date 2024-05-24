@@ -30,7 +30,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
@@ -59,7 +59,7 @@ fun HomeScreen(navController: NavHostController) {
     val viewModel: HomeViewModel = hiltViewModel()
     val state by viewModel.state.collectAsState()
 //    val uiAction by viewModel.actions.collectAsState(null)
-    var searchText by remember { mutableStateOf(TextFieldValue()) }
+    var searchText by rememberSaveable { mutableStateOf("") }
     val filteredPokemonList = state.pokemonFilterList
 
     Surface(modifier = Modifier.fillMaxSize()) {
@@ -87,7 +87,7 @@ fun HomeScreen(navController: NavHostController) {
                 if (filteredPokemonList.isNotEmpty()) {
                     CardList(navController, filteredPokemonList)
                 } else {
-                    if (searchText.text.isEmpty()) {
+                    if (searchText.isEmpty()) {
                         CardList(navController, state.pokemonList)
                     } else {
                         Column(
@@ -103,7 +103,7 @@ fun HomeScreen(navController: NavHostController) {
             }
             LaunchedEffect(searchText) {
                 val filteredList = state.pokemonList.filter {
-                    it.name.contains(searchText.text, ignoreCase = true)
+                    it.name.contains(searchText, ignoreCase = true)
                 }
                 viewModel.sendEvent(
                     HomeContract.HomeScreenUiEvent.ShowPokemonFilterItems(
@@ -118,7 +118,7 @@ fun HomeScreen(navController: NavHostController) {
 
 @Composable
 fun HorizontalRadioGroup(viewModel: HomeViewModel) {
-    var selectedOption by remember { mutableStateOf<SortOption>(SortOption.Ascending) }
+    var selectedOption by rememberSaveable { mutableStateOf(0) }
     val options = SortOption.options
 
     Row(
@@ -128,12 +128,12 @@ fun HorizontalRadioGroup(viewModel: HomeViewModel) {
         verticalAlignment = CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        options.forEach { option ->
+        options.forEachIndexed { index,option ->
             Row(verticalAlignment = CenterVertically) {
                 RadioButton(
-                    selected = selectedOption == option,
+                    selected = selectedOption == index,
                     onClick = {
-                        selectedOption = option
+                        selectedOption = index
                         viewModel.sendEvent(
                             HomeContract.HomeScreenUiEvent.SortPokemonList(
                                 option
@@ -229,8 +229,8 @@ fun PokemonImage(imageURL: String) {
 
 @Composable
 fun SearchBar(
-    searchText: TextFieldValue,
-    onSearchTextChanged: (TextFieldValue) -> Unit
+    searchText: String,
+    onSearchTextChanged: (String) -> Unit
 ) {
 
     Row(
