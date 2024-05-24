@@ -18,29 +18,7 @@ interface PokeApi {
 
     @GET("pokemon/{id}")
     suspend fun getPokemonDetail(
-        @Path("id") id: String
+        @Path("id") id: Int
     ): Response<PokemonDetailResponse>
 
-//    @GET("pokemon/{name}")
-//    suspend fun getPokemonDetails(
-//        @Path("name") name: String
-//    ): Response<PokemonDetailsModel>
-
-//    @GET("pokemon?limit=151")
-//    suspend fun getAllPokemonList(): Response<PokemonListResponse>
-
-//    @GET("type/{id}")
-//    suspend fun getPokemonListByType(
-//        @Path("id") id: String
-//    ): PokemonListByTypeResponse
-//
-//    @GET("pokemon/{id}")
-//    suspend fun getPokemonDetails(
-//        @Path("id") id: String
-//    ): PokemonResponse
-//
-//    @GET("pokemon-species/{id}")
-//    suspend fun getPokemonSpecies(
-//        @Path("id") id: String
-//    ): PokemonSpeciesResponse
 }

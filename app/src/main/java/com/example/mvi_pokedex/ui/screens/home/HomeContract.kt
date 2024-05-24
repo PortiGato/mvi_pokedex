@@ -12,23 +12,18 @@ class HomeContract(): BaseViewContract() {
         val isLoading: Boolean = true,
         val pokemonList: List<Pokemon> = emptyList(),
         val pokemonFilterList: List<Pokemon> = emptyList(),
-        val isShowAddDialog: Boolean = false,
+        val sortSelected: SortOption = SortOption.Ascending,
         val dialogMsg: String = "",
         var searchQuery: String = "",
-        val syncLoading: Boolean = false,
-    ) : UiState() {
-        override fun toString(): String {
-            return "isLoading: $isLoading, data.size: ${pokemonList.size}, isShowAddDialog: $isShowAddDialog"
-        }
-    }
+    ) : UiState()
 
 
     // Posible Events (or intents)
     @Immutable
     sealed class HomeScreenUiEvent : UiEvent() {
-        data class ShowDialog(val show: Boolean) : HomeScreenUiEvent()
-        data class ShowSyncLoading(val show: Boolean) : HomeScreenUiEvent()
+
         data class ShowPokemonFilterItems(val pokemonFilterList: List<Pokemon>) : HomeScreenUiEvent()
+        data class SortPokemonList(val sortOption: SortOption) : HomeScreenUiEvent()
         object DismissDialog : HomeScreenUiEvent()
     }
 
@@ -38,4 +33,17 @@ class HomeContract(): BaseViewContract() {
         data class ShowSnackbar(val msg: String) : HomeUiAction()
     }
 
+}
+
+sealed class SortOption(val label: String) {
+    data object Ascending : SortOption("Asc")
+    data object Descending : SortOption("Desc")
+    data object AlphabeticalAZ : SortOption("A-Z")
+    data object AlphabeticalZA : SortOption("Z-A")
+
+    companion object {
+        // Si no usamos el lazy el primer elemento de la lista no logra inicializarse y es siempre null
+        // Solución : https://stackoverflow.com/a/78188028
+        val options by lazy { listOf(Ascending, Descending, AlphabeticalAZ, AlphabeticalZA) }
+    }
 }

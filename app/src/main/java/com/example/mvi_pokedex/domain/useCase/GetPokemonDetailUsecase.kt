@@ -16,7 +16,7 @@ class GetPokemonDetailUsecase @Inject constructor(
     private val pokemonDetailRepository: PokemonDetailRepository,
     private val context: Context,
 ) {
-    suspend operator fun invoke(id: String) =
+    suspend operator fun invoke(id: Int) =
         withContext(Dispatchers.IO) {
             try {
                 if (Utils.isDeviceOnline(context)) {

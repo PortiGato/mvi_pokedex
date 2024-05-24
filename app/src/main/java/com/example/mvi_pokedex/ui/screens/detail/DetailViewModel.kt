@@ -1,6 +1,7 @@
 package com.example.mvi_pokedex.ui.screens.detail
 
 import androidx.lifecycle.viewModelScope
+import com.example.mvi_pokedex.domain.useCase.GetPokemonDetailUsecase
 import com.example.mvi_pokedex.domain.useCase.GetPokemonListUsecase
 import com.example.mvi_pokedex.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -10,7 +11,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
-    private val getPokemonListUsecase: GetPokemonListUsecase,
+    private val getPokemonDetailUsecase: GetPokemonDetailUsecase,
 ) : BaseViewModel<DetailContract.DetailScreenState, DetailContract.DetailScreenUiEvent, DetailContract.DetailUiAction>() {
 
     //State of view
@@ -18,24 +19,6 @@ class DetailViewModel @Inject constructor(
 
     //init function, get data from local database and sync with remote database
     init {
-
-        viewModelScope.launch() {
-            setState { copy(isLoading = true) }
-            val resultPokemonList = getPokemonListUsecase()
-            if (resultPokemonList.isSuccess) {
-                setState {
-                    copy(
-                        pokemonList = resultPokemonList.getOrNull().orEmpty(),
-                        isLoading = false
-                    )
-                }
-            } else setState {
-                copy(
-                    dialogMsg = resultPokemonList.exceptionOrNull().toString(),
-                    isLoading = false
-                )
-            }
-        }
     }
 
 
@@ -46,18 +29,38 @@ class DetailViewModel @Inject constructor(
                 setState { copy(isShowAddDialog = event.show) }
             }
 
-            is DetailContract.DetailScreenUiEvent.ShowSyncLoading -> {
-                setState { copy(syncLoading = event.show) }
-            }
-
             is DetailContract.DetailScreenUiEvent.DismissDialog -> {
                 setState { copy(isShowAddDialog = false) }
             }
 
-            is DetailContract.DetailScreenUiEvent.ShowPokemonFilterItems -> {
-                setState { copy(pokemonFilterList = event.pokemonFilterList) }
+            is DetailContract.DetailScreenUiEvent.ShowPokemonDetail -> {
+                setState { copy(pokemonDetail = event.pokemonDetail) }
             }
 
+            is DetailContract.DetailScreenUiEvent.SetIDPokemon -> {
+                setState { copy(idPokemon = event.idPokemon) }
+                getPokemonDetail(event.idPokemon)
+            }
+        }
+    }
+
+    private fun getPokemonDetail(idPokemon: Int) {
+        viewModelScope.launch {
+            setState { copy(isLoading = true) }
+            val resultPokemonDetail = getPokemonDetailUsecase(idPokemon)
+            if (resultPokemonDetail.isSuccess) {
+                setState {
+                    copy(
+                        pokemonDetail = resultPokemonDetail.getOrNull(),
+                        isLoading = false
+                    )
+                }
+            } else setState {
+                copy(
+                    dialogMsg = resultPokemonDetail.exceptionOrNull().toString(),
+                    isLoading = false
+                )
+            }
         }
     }
 }

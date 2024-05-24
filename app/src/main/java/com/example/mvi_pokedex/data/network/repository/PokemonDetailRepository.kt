@@ -14,15 +14,14 @@ import javax.inject.Inject
 @Module
 @InstallIn(SingletonComponent::class)
 class PokemonDetailRepository @Inject constructor(
-    var pokemonDetailService: PokemonDetailService
+    private var pokemonDetailService: PokemonDetailService
 ) {
 
     //ONLINE SERVICE
 
     suspend fun getPokemonDetail(
-        id: String
+        id: Int
     ): Result<PokemonDetailResponse> {
-
         val response = pokemonDetailService.getPokemonDetail(id)
         return if (response != null) {
             Result.success(response)

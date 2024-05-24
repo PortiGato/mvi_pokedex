@@ -4,6 +4,7 @@ package com.example.mvi_pokedex.domain.model
 import com.example.mvi_pokedex.data.network.response.PokemonDetailResponse
 import com.example.mvi_pokedex.data.network.response.Types
 import com.example.mvi_pokedex.utils.Constants
+import com.example.mvi_pokedex.utils.Utils.replaceFirstChar
 import java.util.*
 
 data class PokemonDetail(
@@ -43,12 +44,5 @@ private fun getTypes(types: List<Types>): List<String> {
         listOf(replaceFirstChar(types[0].type.name), replaceFirstChar(types[1].type.name))
     } else {
         listOf(replaceFirstChar(types[0].type.name))
-    }
-}
-
-private fun replaceFirstChar(t: String): String {
-    return t.replaceFirstChar {
-        // Cada nombre con Mayuscula la primera letra
-        if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
     }
 }

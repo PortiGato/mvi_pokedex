@@ -9,7 +9,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class PokemonDetailService @Inject constructor(private val api: PokeApi) {
-    suspend fun getPokemonDetail(id: String): PokemonDetailResponse? {
+    suspend fun getPokemonDetail(id: Int): PokemonDetailResponse? {
         return withContext(Dispatchers.IO) {
             val response = api.getPokemonDetail(
                 id = id

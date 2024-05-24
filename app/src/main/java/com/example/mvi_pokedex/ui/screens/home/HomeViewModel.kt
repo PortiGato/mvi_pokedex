@@ -42,22 +42,58 @@ class HomeViewModel @Inject constructor(
     //process events
     override fun reduce(event: HomeContract.HomeScreenUiEvent) {
         when (event) {
-            is HomeContract.HomeScreenUiEvent.ShowDialog -> {
-                setState { copy(isShowAddDialog = event.show) }
-            }
-
-            is HomeContract.HomeScreenUiEvent.ShowSyncLoading -> {
-                setState { copy(syncLoading = event.show) }
-            }
-
-            is HomeContract.HomeScreenUiEvent.DismissDialog -> {
-                setState { copy(isShowAddDialog = false) }
-            }
 
             is HomeContract.HomeScreenUiEvent.ShowPokemonFilterItems -> {
                 setState { copy(pokemonFilterList = event.pokemonFilterList) }
             }
 
+            is HomeContract.HomeScreenUiEvent.SortPokemonList -> {
+                sortPokemonList(event.sortOption)
+            }
+
+            is HomeContract.HomeScreenUiEvent.DismissDialog -> TODO()
+        }
+    }
+
+    private fun sortPokemonList(sortOption: SortOption) {
+        setState { copy(isLoading = true, sortSelected = sortOption) }
+        when (sortOption) {
+            SortOption.Ascending -> {
+                setState {
+                    copy(
+                        isLoading = false,
+                        pokemonList = getState().pokemonList.sortedBy { it.id },
+                        pokemonFilterList = getState().pokemonFilterList.sortedBy { it.id },
+                        )
+                }
+            }
+            SortOption.Descending -> {
+                setState {
+                    copy(
+                        isLoading = false,
+                        pokemonList = getState().pokemonList.sortedByDescending { it.id },
+                        pokemonFilterList = getState().pokemonFilterList.sortedByDescending { it.id },
+                    )
+                }
+            }
+            SortOption.AlphabeticalAZ -> {
+                setState {
+                    copy(
+                        isLoading = false,
+                        pokemonList = getState().pokemonList.sortedBy { it.name },
+                        pokemonFilterList = getState().pokemonFilterList.sortedBy { it.name },
+                    )
+                }
+            }
+            SortOption.AlphabeticalZA -> {
+                setState {
+                    copy(
+                        isLoading = false,
+                        pokemonList = getState().pokemonList.sortedByDescending { it.name },
+                        pokemonFilterList = getState().pokemonFilterList.sortedByDescending { it.name },
+                    )
+                }
+            }
         }
     }
 }

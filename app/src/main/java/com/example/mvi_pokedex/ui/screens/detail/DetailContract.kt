@@ -2,6 +2,7 @@ package com.example.mvi_pokedex.ui.screens.detail
 
 import androidx.compose.runtime.Immutable
 import com.example.mvi_pokedex.domain.model.Pokemon
+import com.example.mvi_pokedex.domain.model.PokemonDetail
 import com.example.mvi_pokedex.ui.base.BaseViewContract
 
 
@@ -10,25 +11,18 @@ class DetailContract(): BaseViewContract() {
     @Immutable
     data class DetailScreenState(
         val isLoading: Boolean = true,
-        val pokemonList: List<Pokemon> = emptyList(),
-        val pokemonFilterList: List<Pokemon> = emptyList(),
+        val pokemonDetail: PokemonDetail? = null,
         val isShowAddDialog: Boolean = false,
         val dialogMsg: String = "",
-        var searchQuery: String = "",
-        val syncLoading: Boolean = false,
-    ) : UiState() {
-        override fun toString(): String {
-            return "isLoading: $isLoading, data.size: ${pokemonList.size}, isShowAddDialog: $isShowAddDialog"
-        }
-    }
-
+        val idPokemon: Int = -1,
+    ) : UiState()
 
     // Posible Events (or intents)
     @Immutable
     sealed class DetailScreenUiEvent : UiEvent() {
         data class ShowDialog(val show: Boolean) : DetailScreenUiEvent()
-        data class ShowSyncLoading(val show: Boolean) : DetailScreenUiEvent()
-        data class ShowPokemonFilterItems(val pokemonFilterList: List<Pokemon>) : DetailScreenUiEvent()
+        data class SetIDPokemon(val idPokemon: Int) : DetailScreenUiEvent()
+        data class ShowPokemonDetail(val pokemonDetail: PokemonDetail) : DetailScreenUiEvent()
         object DismissDialog : DetailScreenUiEvent()
     }
 
