@@ -1,8 +1,16 @@
 package com.example.mvi_pokedex.ui.screens.home
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,7 +24,9 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.TouchApp
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -30,6 +40,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -41,7 +52,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -51,6 +61,7 @@ import coil.request.ImageRequest
 import com.example.mvi_pokedex.R
 import com.example.mvi_pokedex.domain.model.Pokemon
 import com.example.mvi_pokedex.ui.navigation.AppScreens
+import kotlinx.coroutines.delay
 
 
 @Composable
@@ -68,13 +79,26 @@ fun HomeScreen(navController: NavHostController) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            ClickableImage(
+                mainImageResId = R.drawable.pokemon_logo,
+                focusedImageResId = R.drawable.pokemon_logo2,
+                contentDescription = stringResource(id = R.string.pokemon_logo),
+                modifier = Modifier
+                    .size(width = 200.dp, height = 100.dp)
+            )
+
             SearchBar(
                 searchText = searchText,
                 onSearchTextChanged = { searchText = it }
             )
-            Spacer(modifier = Modifier.height(8.dp))
+
             HorizontalRadioGroup(viewModel)
-            Spacer(modifier = Modifier.height(8.dp))
+
+            Spacer(modifier = Modifier.height(4.dp))
+
             if (state.isLoading) {
                 Column(
                     modifier = Modifier.fillMaxSize(),
@@ -184,14 +208,12 @@ fun CardItemView(item: Pokemon, navController: NavHostController) {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Spacer(modifier = Modifier.height(4.dp))
                 PokemonImage(item.imageUrl)
                 Column(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        //text = "#${item.id}",
                         text = stringResource(id = R.string.pokemon_id,item.id),
                         fontSize = 20.sp,
                         modifier = Modifier.padding(4.dp)
@@ -235,7 +257,7 @@ fun SearchBar(
 
     Row(
         modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = CenterVertically
     ) {
 
         OutlinedTextField(
@@ -249,13 +271,79 @@ fun SearchBar(
                 .fillMaxWidth()
                 .padding(8.dp)
                 .background(Color.Transparent),
-            trailingIcon = {
+            leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.Search,
                     contentDescription = stringResource(id = R.string.pokemon_name),
                     modifier = Modifier.size(24.dp)
                 )
+            },
+            trailingIcon = {
+                if (searchText.isNotEmpty()) {
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        contentDescription = stringResource(id = R.string.erase),
+                        modifier = Modifier
+                            .size(24.dp)
+                            .clickable {
+                                onSearchTextChanged("")
+                            }
+                    )
+                }
             }
+        )
+    }
+}
+
+@Composable
+fun ClickableImage(
+    mainImageResId: Int,
+    focusedImageResId: Int,
+    contentDescription: String,
+    delay: Long = 1000,
+    modifier: Modifier = Modifier
+) {
+    var isFocused by remember { mutableStateOf(false) }
+    var isClicked by remember { mutableStateOf(false) }
+
+    Row(verticalAlignment = CenterVertically) {
+        Box(modifier = modifier) {
+            AnimatedContent(
+                targetState = isFocused,
+                transitionSpec = {
+                    fadeIn(animationSpec = tween(durationMillis = 300)) togetherWith
+                            fadeOut(animationSpec = tween(durationMillis = 300))
+                }, label = ""
+            ) { targetState ->
+                Image(
+                    painter = painterResource(id = if (targetState) focusedImageResId else mainImageResId),
+                    contentDescription = contentDescription,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clickable(
+                            //Desactivar la interacción al hacer clic
+                            indication = null,
+                            interactionSource = remember { MutableInteractionSource() }) {
+                            isClicked = true
+                            isFocused = true
+                        }
+                )
+            }
+
+            if (isFocused) {
+                // Volver al estado inicial después de 2 segundos
+                LaunchedEffect(isClicked) {
+                    if (isClicked) {
+                        delay(delay)
+                        isClicked = false
+                        isFocused = false
+                    }
+                }
+            }
+        }
+        Icon(
+            imageVector = Icons.Default.TouchApp,
+            contentDescription = stringResource(id = R.string.touch)
         )
     }
 }

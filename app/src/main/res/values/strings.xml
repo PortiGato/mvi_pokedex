@@ -1,8 +1,13 @@
 <resources>
     <string name="app_name">mvi_pokedex</string>
+    <string name="pokemon_logo">Logo de Pokémon</string>
     <string name="pokemon_name">Nombre del Pokémon</string>
     <string name="pokemon_image">Imagen del Pokémon</string>
     <string name="pokemon_id">Nº %03d</string>
     <string name="result_not_found">No se encontró el Pokémon</string>
+    <string name="close">Cerrar</string>
+    <string name="search_pokemon">Buscar Pokémon</string>
+    <string name="erase">Borrar contenido</string>
+    <string name="touch">Clickable</string>
 
 </resources>
