@@ -91,6 +91,10 @@ dependencies {
 
     //Coil
     implementation(libs.coil.compose)
+    implementation(libs.coil.gif)
+
+    //Lottie
+    implementation(libs.lottie.compose)
 
 }
 

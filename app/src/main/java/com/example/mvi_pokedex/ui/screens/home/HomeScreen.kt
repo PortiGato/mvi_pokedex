@@ -29,7 +29,6 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.TouchApp
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
@@ -39,6 +38,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -52,14 +52,21 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.mvi_pokedex.R
 import com.example.mvi_pokedex.domain.model.Pokemon
+import com.example.mvi_pokedex.ui.components.LocalGifImageView
 import com.example.mvi_pokedex.ui.navigation.AppScreens
 import kotlinx.coroutines.delay
 
@@ -105,7 +112,7 @@ fun HomeScreen(navController: NavHostController) {
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    CircularProgressIndicator()
+                    LottieAnimationComponent(R.raw.pokeball_loading,200.dp)
                 }
             } else {
                 if (filteredPokemonList.isNotEmpty()) {
@@ -116,9 +123,11 @@ fun HomeScreen(navController: NavHostController) {
                     } else {
                         Column(
                             Modifier.fillMaxSize(),
-                            verticalArrangement = Arrangement.Center,
+                            verticalArrangement = Arrangement.Top,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
+                            LocalGifImageView(R.drawable.pikachu_dizzy)
+                            Spacer(modifier = Modifier.height(8.dp))
                             Text(text = stringResource(id = R.string.result_not_found))
                         }
 
@@ -142,7 +151,7 @@ fun HomeScreen(navController: NavHostController) {
 
 @Composable
 fun HorizontalRadioGroup(viewModel: HomeViewModel) {
-    var selectedOption by rememberSaveable { mutableStateOf(0) }
+    var selectedOption by rememberSaveable { mutableIntStateOf(0) }
     val options = SortOption.options
 
     Row(
@@ -208,7 +217,7 @@ fun CardItemView(item: Pokemon, navController: NavHostController) {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                PokemonImage(item.imageUrl)
+                PokemonListImage(item.imageUrl)
                 Column(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
@@ -232,7 +241,7 @@ fun CardItemView(item: Pokemon, navController: NavHostController) {
 }
 
 @Composable
-fun PokemonImage(imageURL: String) {
+fun PokemonListImage(imageURL: String) {
     AsyncImage(
         model = ImageRequest.Builder(LocalContext.current)
             .data(imageURL)
@@ -247,7 +256,6 @@ fun PokemonImage(imageURL: String) {
         error = painterResource(R.drawable.pokebola),
         placeholder = painterResource(R.drawable.pokebola))
 }
-
 
 @Composable
 fun SearchBar(
@@ -306,7 +314,15 @@ fun ClickableImage(
     var isFocused by remember { mutableStateOf(false) }
     var isClicked by remember { mutableStateOf(false) }
 
-    Row(verticalAlignment = CenterVertically) {
+    Row(verticalAlignment = CenterVertically,
+        modifier = Modifier.clickable(
+            //Desactivar la interacción al hacer clic
+            indication = null,
+            interactionSource = remember { MutableInteractionSource() }) {
+            isClicked = true
+            isFocused = true
+        }
+    ) {
         Box(modifier = modifier) {
             AnimatedContent(
                 targetState = isFocused,
@@ -320,13 +336,6 @@ fun ClickableImage(
                     contentDescription = contentDescription,
                     modifier = Modifier
                         .fillMaxSize()
-                        .clickable(
-                            //Desactivar la interacción al hacer clic
-                            indication = null,
-                            interactionSource = remember { MutableInteractionSource() }) {
-                            isClicked = true
-                            isFocused = true
-                        }
                 )
             }
 
@@ -346,4 +355,20 @@ fun ClickableImage(
             contentDescription = stringResource(id = R.string.touch)
         )
     }
+}
+
+@Composable
+fun LottieAnimationComponent(resLottie: Int, size: Dp) {
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(resLottie))
+
+    val progress by animateLottieCompositionAsState(
+        composition = composition,
+        iterations = LottieConstants.IterateForever
+    )
+
+    LottieAnimation(
+        composition = composition,
+        progress = { progress },
+        modifier = Modifier.size(size)
+    )
 }
