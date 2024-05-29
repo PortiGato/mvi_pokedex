@@ -96,6 +96,9 @@ dependencies {
     //Lottie
     implementation(libs.lottie.compose)
 
+    //Pager
+    implementation(libs.accompanist.pager)
+
 }
 
 kapt {

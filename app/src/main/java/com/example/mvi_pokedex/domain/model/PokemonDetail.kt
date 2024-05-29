@@ -8,7 +8,7 @@ import com.example.mvi_pokedex.utils.Utils.replaceFirstChar
 import java.util.*
 
 data class PokemonDetail(
-    val id: String,
+    val id: Int,
     val name: String,
     val imgURL: String,
     val hp: Int,
@@ -23,7 +23,7 @@ data class PokemonDetail(
 )
 
 fun PokemonDetailResponse.toModel(): PokemonDetail {
-    val id = "N° ${id.toString().padStart(3,'0')}"
+    val id = id
     val name = replaceFirstChar(name)
     val imageUrl: String = Constants.IMAGE_POKEMON_URL + id + Constants.IMAGE_POKEMON_FORMAT
     val hp = pokemonDetails[0].statValue

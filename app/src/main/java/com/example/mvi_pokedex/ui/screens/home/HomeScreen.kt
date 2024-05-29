@@ -217,7 +217,7 @@ fun CardItemView(item: Pokemon, navController: NavHostController) {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                PokemonListImage(item.imageUrl)
+                PokemonListImage(item.imageUrl, 100.dp)
                 Column(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
@@ -241,7 +241,7 @@ fun CardItemView(item: Pokemon, navController: NavHostController) {
 }
 
 @Composable
-fun PokemonListImage(imageURL: String) {
+fun PokemonListImage(imageURL: String, size: Dp = 100.dp) {
     AsyncImage(
         model = ImageRequest.Builder(LocalContext.current)
             .data(imageURL)
@@ -249,9 +249,8 @@ fun PokemonListImage(imageURL: String) {
             .build(),
         stringResource(id = R.string.pokemon_name),
         modifier = Modifier
-            .size(100.dp)
+            .size(size)
             .clip(CircleShape)
-            //.background(Color.Gray.copy(alpha = 0.1f))
             .padding(8.dp),
         error = painterResource(R.drawable.pokebola),
         placeholder = painterResource(R.drawable.pokebola))
