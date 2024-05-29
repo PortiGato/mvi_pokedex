@@ -45,6 +45,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.mvi_pokedex.R
+import com.example.mvi_pokedex.ui.components.MovingIconScreen
 import com.example.mvi_pokedex.ui.components.StatRow
 import com.example.mvi_pokedex.ui.components.SwipeGestureDetector
 import com.example.mvi_pokedex.ui.screens.home.PokemonListImage
@@ -107,7 +108,10 @@ fun DetailScreen(navController: NavHostController,pokemonId: Int) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "N° ${state.pokemonDetail?.id.toString().padStart(3, '0')}",
+                        text = stringResource(
+                            id = R.string.pokemon_id,
+                            state.pokemonDetail?.id ?: 0
+                        ),
                         modifier = Modifier.padding(start = 16.dp),
                         fontSize = 20.sp,
                         fontWeight = Bold
@@ -127,7 +131,16 @@ fun DetailScreen(navController: NavHostController,pokemonId: Int) {
                 fontWeight = Bold
             )
             Spacer(modifier = Modifier.height(8.dp))
-            TypeList(state.pokemonDetail?.types.orEmpty())
+
+            //Si solo tiene un tipo solo se pinta una sola Card,
+            // si tiene 2 o mas pongo una LazyVerticalGrid de 2 columnas para que lo gestione
+            if (state.pokemonDetail?.types.orEmpty().size >= 2) {
+                TypeList(state.pokemonDetail?.types.orEmpty())
+            } else {
+                state.pokemonDetail?.types?.first()?.let { TypeCardItem(it, 150.dp) }
+            }
+
+
             Spacer(modifier = Modifier.height(16.dp))
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -151,7 +164,7 @@ fun DetailScreen(navController: NavHostController,pokemonId: Int) {
                         fontSize = 20.sp
                     )
                 }
-                Spacer(modifier = Modifier.width(32.dp))
+                Spacer(modifier = Modifier.width(64.dp))
                 Column(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = CenterHorizontally
@@ -180,10 +193,10 @@ fun DetailScreen(navController: NavHostController,pokemonId: Int) {
 
                 Text(
                     text = stringResource(id = R.string.stats),
-                    fontSize = 20.sp,
+                    fontSize = 30.sp,
                     fontWeight = Bold
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
                 StatRow(text = "HP", progress = state.pokemonDetail?.hp ?: 0, progressColor = Color.Green )
                 StatRow(text = "ATK", progress = state.pokemonDetail?.attack ?: 0, progressColor = Color.Red )
@@ -193,6 +206,18 @@ fun DetailScreen(navController: NavHostController,pokemonId: Int) {
                 StatRow(text = "SD", progress = state.pokemonDetail?.specialDefense ?: 0, progressColor = Color.Cyan )
 
             }
+
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 64.dp, vertical = 8.dp),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                //Podría poner unas flechas laterales para indicar que se puede hacer swipe pero...
+                //¡¡Animación!!
+                MovingIconScreen()
+            }
+
         }
     }
 }
@@ -200,10 +225,7 @@ fun DetailScreen(navController: NavHostController,pokemonId: Int) {
 @Composable
 fun TypeList(pokemonTypes: List<String>) {
     LazyVerticalGrid(
-        columns = GridCells.Fixed(
-            //Si solo tiene un tipo solo se pinta una columna, si tiene 2 o mas se dividiran en 2
-            if (pokemonTypes.size >= 2) 2 else 1
-        ),
+        columns = GridCells.Fixed(2),
         horizontalArrangement = Arrangement.Center
     ) {
 
@@ -214,12 +236,12 @@ fun TypeList(pokemonTypes: List<String>) {
 }
 
 @Composable
-private fun TypeCardItem(type: String) {
+private fun TypeCardItem(type: String, widthType: Dp = Dp.Unspecified) {
 
     Card(
         modifier = Modifier
             .padding(16.dp)
-            .width(150.dp),
+            .width(widthType),
         colors = CardDefaults.cardColors(containerColor = Color.Red)
     ) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
