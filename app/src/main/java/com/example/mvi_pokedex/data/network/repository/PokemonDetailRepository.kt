@@ -8,26 +8,18 @@ import com.example.mvi_pokedex.utils.Constants
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 
-@Module
-@InstallIn(SingletonComponent::class)
-class PokemonDetailRepository @Inject constructor(
-    private var pokemonDetailService: PokemonDetailService
-) {
+interface PokemonDetailRepository {
+    suspend fun getPokemonDetail(id: Int): Flow<PokemonDetailResponse>
+}
 
-    //ONLINE SERVICE
-
-    suspend fun getPokemonDetail(
-        id: Int
-    ): Result<PokemonDetailResponse> {
-        val response = pokemonDetailService.getPokemonDetail(id)
-        return if (response != null) {
-            Result.success(response)
-        } else {
-            Result.failure(Exception("Error en la solicitud"))
-        }
+class PokemonDetailRepositoryImpl @Inject constructor(
+    private val pokemonDetailService: PokemonDetailService
+) : PokemonDetailRepository {
+    override suspend fun getPokemonDetail(id: Int): Flow<PokemonDetailResponse> {
+        return pokemonDetailService.getPokemonDetail(id)
     }
-
 }

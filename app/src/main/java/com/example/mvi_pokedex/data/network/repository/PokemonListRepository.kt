@@ -3,30 +3,24 @@ package com.example.mvi_pokedex.data.network.repository
 import com.example.mvi_pokedex.data.network.response.PokemonListResponse
 import com.example.mvi_pokedex.data.network.service.PokemonListService
 import com.example.mvi_pokedex.utils.Constants
+import com.example.mvi_pokedex.utils.Constants.FIRST_POKEMON
+import com.example.mvi_pokedex.utils.Constants.NUM_POKEMONS
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 
-@Module
-@InstallIn(SingletonComponent::class)
-class PokemonListRepository @Inject constructor(
-    var pokemonListService: PokemonListService
-) {
+interface PokemonListRepository {
+    suspend fun getPokemonList(offset: Int,limit: Int): Flow<PokemonListResponse>
+}
 
-    ////ONLINE SERVICE
-
-    suspend fun getPokemonList(
-        limit: Int = Constants.NUM_POKEMONS, offset: Int = Constants.FIRST_POKEMON
-    ): Result<PokemonListResponse> {
-
-        val response = pokemonListService.getPokemonList(limit,offset)
-        return if (response != null) {
-            Result.success(response)
-        } else {
-            Result.failure(Exception("Error en la solicitud"))
-        }
+class PokemonListRepositoryImpl @Inject constructor(
+    private val pokemonListService: PokemonListService
+) : PokemonListRepository {
+    override suspend fun getPokemonList(offset: Int, limit: Int): Flow<PokemonListResponse> {
+        return pokemonListService.getPokemonList(offset,limit)
     }
-
 }

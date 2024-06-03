@@ -5,6 +5,7 @@ import com.example.mvi_pokedex.domain.useCase.GetPokemonDetailUsecase
 import com.example.mvi_pokedex.domain.useCase.GetPokemonListUsecase
 import com.example.mvi_pokedex.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -45,22 +46,17 @@ class DetailViewModel @Inject constructor(
     }
 
     private fun getPokemonDetail(idPokemon: Int) {
-        viewModelScope.launch {
+
+        viewModelScope.launch() {
             setState { copy(isLoading = true) }
-            val resultPokemonDetail = getPokemonDetailUsecase(idPokemon)
-            if (resultPokemonDetail.isSuccess) {
-                setState {
-                    copy(
-                        pokemonDetail = resultPokemonDetail.getOrNull(),
-                        isLoading = false
-                    )
+            getPokemonDetailUsecase(idPokemon)
+                .catch { exception ->
+                    setState { copy(errorMsg = exception.message) }
                 }
-            } else setState {
-                copy(
-                    dialogMsg = resultPokemonDetail.exceptionOrNull().toString(),
-                    isLoading = false
-                )
-            }
+                .collect { pokemonDetail ->
+                    setState { copy(pokemonDetail = pokemonDetail, isLoading = false) }
+                }
         }
+
     }
 }

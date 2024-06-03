@@ -3,6 +3,7 @@ package com.example.mvi_pokedex.data.network.api
 
 import com.example.mvi_pokedex.data.network.response.PokemonDetailResponse
 import com.example.mvi_pokedex.data.network.response.PokemonListResponse
+import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -14,11 +15,11 @@ interface PokeApi {
     suspend fun getPokemonList(
         @Query("offset") offset: Int,
         @Query("limit") limit: Int
-    ): Response<PokemonListResponse>
+    ): PokemonListResponse
 
     @GET("pokemon/{id}")
     suspend fun getPokemonDetail(
         @Path("id") id: Int
-    ): Response<PokemonDetailResponse>
+    ): PokemonDetailResponse
 
 }

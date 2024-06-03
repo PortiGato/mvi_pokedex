@@ -13,7 +13,7 @@ class HomeContract(): BaseViewContract() {
         val pokemonList: List<Pokemon> = emptyList(),
         val pokemonFilterList: List<Pokemon> = emptyList(),
         val sortSelected: SortOption = SortOption.Ascending,
-        val dialogMsg: String = "",
+        val errorMsg: String? = "",
         var searchQuery: String = "",
     ) : UiState()
 
@@ -24,6 +24,7 @@ class HomeContract(): BaseViewContract() {
 
         data class ShowPokemonFilterItems(val pokemonFilterList: List<Pokemon>) : HomeScreenUiEvent()
         data class SortPokemonList(val sortOption: SortOption) : HomeScreenUiEvent()
+        object FetchPokemonList : HomeScreenUiEvent()
         object DismissDialog : HomeScreenUiEvent()
     }
 

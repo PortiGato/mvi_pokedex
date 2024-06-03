@@ -80,6 +80,10 @@ fun HomeScreen(navController: NavHostController) {
     var searchText by rememberSaveable { mutableStateOf("") }
     val filteredPokemonList = state.pokemonFilterList
 
+    LaunchedEffect(Unit) {
+        viewModel.sendEvent(HomeContract.HomeScreenUiEvent.FetchPokemonList)
+    }
+
     Surface(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier.fillMaxSize(),

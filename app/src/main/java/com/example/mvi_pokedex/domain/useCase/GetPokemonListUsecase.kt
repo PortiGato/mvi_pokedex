@@ -2,11 +2,14 @@ package com.example.mvi_pokedex.domain.useCase
 
 import android.content.Context
 import com.example.mvi_pokedex.data.network.repository.PokemonListRepository
+import com.example.mvi_pokedex.domain.model.Pokemon
 import com.example.mvi_pokedex.utils.Constants.FIRST_POKEMON
 import com.example.mvi_pokedex.utils.Constants.NUM_POKEMONS
 import com.example.mvi_pokedex.utils.Utils
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import retrofit2.HttpException
 import javax.inject.Inject
 
@@ -14,24 +17,20 @@ class GetPokemonListUsecase @Inject constructor(
     private val pokemonListRepository: PokemonListRepository,
     private val context: Context,
 ) {
-    suspend operator fun invoke(limit: Int = NUM_POKEMONS, offset: Int = FIRST_POKEMON) =
-        withContext(Dispatchers.IO) {
-            try {
-                if (Utils.isDeviceOnline(context)) {
-                    val response = pokemonListRepository.getPokemonList(limit, offset)
-                    if (response.isSuccess) {
-                        //Traigo la respuesta con  lista de pokemons y la convierto a un modelo, a continuación sustituyo la primera letra del nombre por mayúscula
-                        val listPokemon = response.getOrNull()?.results?.map { it.toModel() }
-                            ?.map { pokemonName -> pokemonName.copy(name = pokemonName.name.replaceFirstChar { it.uppercase() }) }
-                            .orEmpty()
-                        Result.success(listPokemon)
-                    } else
-                        Result.failure(Exception("Error en la solicitud " + response.exceptionOrNull()?.message))
-                } else {
-                    Result.failure(Exception("Sin conexión a internet"))
-                }
-            } catch (ex: HttpException) {
-                Result.failure(Exception("Error en la solicitud " + ex.message))
+    operator fun invoke(offset: Int = FIRST_POKEMON, limit: Int = NUM_POKEMONS): Flow<List<Pokemon>> = flow {
+        try {
+            if (Utils.isDeviceOnline(context)) {
+                pokemonListRepository.getPokemonList(offset,limit)
+                    .collect { response ->
+                        val listPokemon = response.results.map { it.toModel() }
+                            .map { pokemonName -> pokemonName.copy(name = pokemonName.name.replaceFirstChar { it.uppercase() }) }
+                        emit(listPokemon)
+                    }
+            } else {
+                throw Exception("Sin conexión a internet")
             }
+        } catch (ex: HttpException) {
+            throw Exception("Error en la solicitud: ${ex.message}")
         }
-    }
+    }.flowOn(Dispatchers.IO)
+}

@@ -1,8 +1,15 @@
 package com.example.mvi_pokedex.di
 
 import com.example.mvi_pokedex.data.network.api.PokeApi
+import com.example.mvi_pokedex.data.network.repository.PokemonDetailRepository
+import com.example.mvi_pokedex.data.network.repository.PokemonDetailRepositoryImpl
+import com.example.mvi_pokedex.data.network.repository.PokemonListRepository
+import com.example.mvi_pokedex.data.network.repository.PokemonListRepositoryImpl
+import com.example.mvi_pokedex.data.network.service.PokemonDetailService
+import com.example.mvi_pokedex.data.network.service.PokemonListService
 import com.example.mvi_pokedex.utils.Constants.BASE_URL
 import com.example.mvi_pokedex.utils.Constants.TIMEOUT
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -60,5 +67,25 @@ object AppModule {
     @Provides
     fun providePokeApi(@Named("RetrofitApp") retrofit: Retrofit): PokeApi =
         retrofit.create(PokeApi::class.java)
+
+    @Singleton
+    @Provides
+    fun providePokemonListService(pokeApi: PokeApi): PokemonListService =
+        PokemonListService(pokeApi)
+
+    @Singleton
+    @Provides
+    fun providePokemonListRepository(pokemonListService: PokemonListService): PokemonListRepository =
+        PokemonListRepositoryImpl(pokemonListService)
+
+    @Singleton
+    @Provides
+    fun providePokemonDetailService(pokeApi: PokeApi): PokemonDetailService =
+        PokemonDetailService(pokeApi)
+
+    @Singleton
+    @Provides
+    fun providePokemonDetailRepository(pokemonDetailService: PokemonDetailService): PokemonDetailRepository =
+        PokemonDetailRepositoryImpl(pokemonDetailService)
 
 }

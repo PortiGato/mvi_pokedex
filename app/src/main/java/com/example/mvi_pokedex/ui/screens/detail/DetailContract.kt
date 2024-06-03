@@ -13,7 +13,7 @@ class DetailContract(): BaseViewContract() {
         val isLoading: Boolean = true,
         val pokemonDetail: PokemonDetail? = null,
         val isShowAddDialog: Boolean = false,
-        val dialogMsg: String = "",
+        val errorMsg: String? = "",
         val idPokemon: Int = -1,
     ) : UiState()
 

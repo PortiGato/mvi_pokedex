@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.mvi_pokedex.domain.useCase.GetPokemonListUsecase
 import com.example.mvi_pokedex.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -15,29 +16,6 @@ class HomeViewModel @Inject constructor(
 
     //State of view
     override val initialViewState = HomeContract.HomeScreenState()
-
-    //init function, get data from local database and sync with remote database
-    init {
-
-        viewModelScope.launch() {
-            setState { copy(isLoading = true) }
-            val resultPokemonList = getPokemonListUsecase()
-            if (resultPokemonList.isSuccess) {
-                setState {
-                    copy(
-                        pokemonList = resultPokemonList.getOrNull().orEmpty(),
-                        isLoading = false
-                    )
-                }
-            } else setState {
-                copy(
-                    dialogMsg = resultPokemonList.exceptionOrNull().toString(),
-                    isLoading = false
-                )
-            }
-        }
-    }
-
 
     //process events
     override fun reduce(event: HomeContract.HomeScreenUiEvent) {
@@ -52,6 +30,9 @@ class HomeViewModel @Inject constructor(
             }
 
             is HomeContract.HomeScreenUiEvent.DismissDialog -> TODO()
+            is HomeContract.HomeScreenUiEvent.FetchPokemonList -> {
+                fetchPokemon()
+            }
         }
     }
 
@@ -94,6 +75,19 @@ class HomeViewModel @Inject constructor(
                     )
                 }
             }
+        }
+    }
+
+    private fun fetchPokemon() {
+        viewModelScope.launch() {
+            setState { copy(isLoading = true) }
+            getPokemonListUsecase()
+                .catch { exception ->
+                    setState { copy(errorMsg = exception.message) }
+                }
+                .collect { pokemons ->
+                    setState { copy(pokemonList = pokemons, isLoading = false) }
+                }
         }
     }
 }
