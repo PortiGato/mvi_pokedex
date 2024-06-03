@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,14 +20,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.mvi_pokedex.utils.Constants.MAX_STATS
 
 @Composable
 fun StatRow(
     text: String,
-    textColor: Color = Color.Black,
+    textColor: Color = MaterialTheme.colorScheme.onBackground,
     progress: Int,
     progressColor: Color,
-    progressBackgroundColor: Color = Color.White,
+    progressBackgroundColor: Color = MaterialTheme.colorScheme.onBackground,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -55,7 +57,7 @@ fun StatRow(
         )
 
         LinearProgressIndicator(
-            progress = { progress.toFloat() / 100 },
+            progress = { progress.toFloat() / MAX_STATS },
             modifier = Modifier
                 .weight(6f)
                 .fillMaxSize()

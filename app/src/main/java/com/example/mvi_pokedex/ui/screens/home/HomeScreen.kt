@@ -6,7 +6,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -28,10 +27,14 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.TouchApp
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonColors
+import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -47,7 +50,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -84,7 +86,8 @@ fun HomeScreen(navController: NavHostController) {
         viewModel.sendEvent(HomeContract.HomeScreenUiEvent.FetchPokemonList)
     }
 
-    Surface(modifier = Modifier.fillMaxSize()) {
+    Surface(modifier = Modifier.fillMaxSize(),color = MaterialTheme.colorScheme.background) {
+
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
@@ -169,6 +172,7 @@ fun HorizontalRadioGroup(viewModel: HomeViewModel) {
             Row(verticalAlignment = CenterVertically) {
                 RadioButton(
                     selected = selectedOption == index,
+                    colors = RadioButtonDefaults.colors(unselectedColor = MaterialTheme.colorScheme.onBackground),
                     onClick = {
                         selectedOption = index
                         viewModel.sendEvent(
@@ -182,6 +186,7 @@ fun HorizontalRadioGroup(viewModel: HomeViewModel) {
                 Text(
                     text = option.label,
                     fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(start = 4.dp)
                 )
             }
@@ -195,7 +200,6 @@ fun CardList(navController: NavHostController, pokemonList: List<Pokemon>) {
         columns = GridCells.Fixed(2),
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.LightGray)
     ) {
 
         items(pokemonList) { item ->
@@ -213,11 +217,11 @@ fun CardItemView(item: Pokemon, navController: NavHostController) {
             .clickable {
                 navController.navigate(AppScreens.DetailScreen.createRoute(item.id))
             },
-        elevation = CardDefaults.cardElevation(4.dp)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondary),
+        elevation = CardDefaults.cardElevation(4.dp),
     ) {
             Column(
-                modifier = Modifier
-                    .fillMaxSize(),
+                modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -280,13 +284,13 @@ fun SearchBar(
             singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp)
-                .background(Color.Transparent),
+                .padding(8.dp),
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.Search,
                     contentDescription = stringResource(id = R.string.pokemon_name),
-                    modifier = Modifier.size(24.dp)
+                    modifier = Modifier.size(24.dp),
+                    tint = MaterialTheme.colorScheme.onBackground
                 )
             },
             trailingIcon = {
@@ -294,6 +298,7 @@ fun SearchBar(
                     Icon(
                         imageVector = Icons.Default.Close,
                         contentDescription = stringResource(id = R.string.erase),
+                        tint = MaterialTheme.colorScheme.onBackground,
                         modifier = Modifier
                             .size(24.dp)
                             .clickable {

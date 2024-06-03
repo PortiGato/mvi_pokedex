@@ -8,5 +8,6 @@ object Constants {
     const val FIRST_POKEMON = 0
     const val TIMEOUT = 60L
     const val POKEMON_ID = "POKEMON_ID"
+    const val MAX_STATS = 150
 }
 
