@@ -14,6 +14,12 @@
     <string name="weight">Peso</string>
     <string name="weight_kg">%1s KG</string>
     <string name="stats">Estadísticas</string>
+    <string name="hp">HP</string>
+    <string name="atk">ATK</string>
+    <string name="def">DEF</string>
+    <string name="sp">SP</string>
+    <string name="sa">SA</string>
+    <string name="sd">SD</string>
     <string name="swipeable">Desliza para cambiar</string>
     <string name="error">Error</string>
     <string name="error_description">Ha ocurrido un error. Por favor, inténtelo de nuevo.</string>

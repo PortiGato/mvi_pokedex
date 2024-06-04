@@ -31,7 +31,6 @@ abstract class BaseViewModel<S, E, A> : ViewModel() {
 
     private val pendingActions: MutableList<A> = mutableListOf()
 
-
     //get current app state
     fun getState(): S {
         return state.value
@@ -42,7 +41,6 @@ abstract class BaseViewModel<S, E, A> : ViewModel() {
     }
 
     fun onStateSelected(state: S) = _state.tryEmit(state)
-
 
     //All vm lifecycle observe and event (in channel) and reduce it
     init {
@@ -58,7 +56,6 @@ abstract class BaseViewModel<S, E, A> : ViewModel() {
         }
     }
 
-
     private val <T> MutableSharedFlow<T>.hasSubscribers: Boolean
         get() = subscriptionCount.value > 0
 
@@ -70,12 +67,8 @@ abstract class BaseViewModel<S, E, A> : ViewModel() {
         }
     }
 
-
-    //proccess event
     protected abstract fun reduce(event: E)
 
-
-    //Send event in channel
     fun sendEvent(event: E) {
         viewModelScope.launch {
             vmIntent.send(event)

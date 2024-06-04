@@ -66,4 +66,8 @@ object Utils {
         }
     }
 
+    fun getColorsByNames(names: List<String>): List<Color> {
+        return names.map { getColorByName(it) }
+    }
+
 }

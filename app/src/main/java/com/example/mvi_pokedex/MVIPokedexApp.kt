@@ -15,14 +15,5 @@ class MVIPokedexApp : Application() {
         super.onCreate()
     }
 
-//    @Singleton
-//    @Provides
-//    fun provideDataBaseProperties(): GsDatabaseProperties {
-//        return GsDatabaseProperties("GsTemplateDB")
-//    }
-
-    
-
-
 }
 
