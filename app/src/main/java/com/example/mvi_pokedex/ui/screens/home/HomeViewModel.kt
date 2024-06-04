@@ -29,7 +29,13 @@ class HomeViewModel @Inject constructor(
                 sortPokemonList(event.sortOption)
             }
 
-            is HomeContract.HomeScreenUiEvent.DismissDialog -> TODO()
+            is HomeContract.HomeScreenUiEvent.DismissDialog -> {
+                setState { copy(showDialog = false) }
+            }
+
+            is HomeContract.HomeScreenUiEvent.ShowDialog -> {
+                setState { copy(showDialog = true) }
+            }
             is HomeContract.HomeScreenUiEvent.FetchPokemonList -> {
                 fetchPokemon()
             }
@@ -83,7 +89,13 @@ class HomeViewModel @Inject constructor(
             setState { copy(isLoading = true) }
             getPokemonListUsecase()
                 .catch { exception ->
-                    setState { copy(errorMsg = exception.message) }
+                    setState {
+                        copy(
+                            isLoading = false,
+                            showDialog = true,
+                            errorMsg = exception.message,
+                        )
+                    }
                 }
                 .collect { pokemons ->
                     setState { copy(pokemonList = pokemons, isLoading = false) }

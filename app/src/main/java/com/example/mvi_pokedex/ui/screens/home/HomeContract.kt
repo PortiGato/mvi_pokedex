@@ -10,6 +10,7 @@ class HomeContract(): BaseViewContract() {
     @Immutable
     data class HomeScreenState(
         val isLoading: Boolean = true,
+        val showDialog: Boolean = false,
         val pokemonList: List<Pokemon> = emptyList(),
         val pokemonFilterList: List<Pokemon> = emptyList(),
         val sortSelected: SortOption = SortOption.Ascending,
@@ -26,13 +27,12 @@ class HomeContract(): BaseViewContract() {
         data class SortPokemonList(val sortOption: SortOption) : HomeScreenUiEvent()
         object FetchPokemonList : HomeScreenUiEvent()
         object DismissDialog : HomeScreenUiEvent()
+        object ShowDialog : HomeScreenUiEvent()
     }
 
 
     //Action
-    sealed class HomeUiAction: UiAction() {
-        data class ShowSnackbar(val msg: String) : HomeUiAction()
-    }
+    sealed class HomeUiAction: UiAction() {}
 
 }
 

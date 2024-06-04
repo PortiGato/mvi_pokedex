@@ -68,6 +68,7 @@ import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.mvi_pokedex.R
 import com.example.mvi_pokedex.domain.model.Pokemon
+import com.example.mvi_pokedex.ui.components.ErrorAlertDialog
 import com.example.mvi_pokedex.ui.components.LocalGifImageView
 import com.example.mvi_pokedex.ui.navigation.AppScreens
 import kotlinx.coroutines.delay
@@ -78,7 +79,6 @@ fun HomeScreen(navController: NavHostController) {
 
     val viewModel: HomeViewModel = hiltViewModel()
     val state by viewModel.state.collectAsState()
-//    val uiAction by viewModel.actions.collectAsState(null)
     var searchText by rememberSaveable { mutableStateOf("") }
     val filteredPokemonList = state.pokemonFilterList
 
@@ -94,12 +94,15 @@ fun HomeScreen(navController: NavHostController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(32.dp))
 
+            //Muestra un efecto de enseñar otra imagen y luego dejarla como estaba
+            // y vuelve a intentar descargar la lista de pokemon
             ClickableImage(
                 mainImageResId = R.drawable.pokemon_logo,
                 focusedImageResId = R.drawable.pokemon_logo2,
                 contentDescription = stringResource(id = R.string.pokemon_logo),
+                onClick = {viewModel.sendEvent(HomeContract.HomeScreenUiEvent.FetchPokemonList)},
                 modifier = Modifier
                     .size(width = 200.dp, height = 100.dp)
             )
@@ -122,6 +125,13 @@ fun HomeScreen(navController: NavHostController) {
                     LottieAnimationComponent(R.raw.pokeball_loading,200.dp)
                 }
             } else {
+
+                ErrorAlertDialog(
+                    showDialog = state.showDialog,
+                    onDismiss = { viewModel.sendEvent(HomeContract.HomeScreenUiEvent.DismissDialog) },
+                    description = state.errorMsg ?: stringResource(id = R.string.error_description)
+                )
+                
                 if (filteredPokemonList.isNotEmpty()) {
                     CardList(navController, filteredPokemonList)
                 } else {
@@ -316,6 +326,7 @@ fun ClickableImage(
     mainImageResId: Int,
     focusedImageResId: Int,
     contentDescription: String,
+    onClick: () -> Unit = {},
     delay: Long = 1000,
     modifier: Modifier = Modifier
 ) {
@@ -327,6 +338,7 @@ fun ClickableImage(
             //Desactivar la interacción al hacer clic
             indication = null,
             interactionSource = remember { MutableInteractionSource() }) {
+            onClick.invoke()
             isClicked = true
             isFocused = true
         }

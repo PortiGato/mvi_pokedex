@@ -15,5 +15,8 @@
     <string name="weight_kg">%1s KG</string>
     <string name="stats">Estadísticas</string>
     <string name="swipeable">Desliza para cambiar</string>
+    <string name="error">Error</string>
+    <string name="error_description">Ha ocurrido un error. Por favor, inténtelo de nuevo.</string>
+    <string name="accept">Aceptar</string>
 
 </resources>
