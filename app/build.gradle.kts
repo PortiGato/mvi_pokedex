@@ -3,7 +3,6 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     kotlin("kapt")
     alias(libs.plugins.dagger.hilt.android)
-    //alias(libs.plugins.devtools.ksp)
 }
 
 android {
@@ -74,11 +73,27 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-
     //Dagger Hilt
     implementation(libs.hilt.android)
-    //implementation(libs.hilt.android.compiler)
     kapt(libs.hilt.android.compiler)
+    implementation(libs.hilt.navigation.compose)
+    implementation(libs.lifecycle.viewmodel.compose)
+
+    //Retrofit
+    implementation(libs.squareup.retrofit2)
+    implementation(libs.google.code.gson)
+    implementation(libs.squareup.okhttp3)
+    implementation(libs.squareup.okhttp3.logging.interceptor)
+
+    //Icons
+    implementation(libs.material.icons.extended)
+
+    //Coil
+    implementation(libs.coil.compose)
+    implementation(libs.coil.gif)
+
+    //Lottie
+    implementation(libs.lottie.compose)
 
 }
 

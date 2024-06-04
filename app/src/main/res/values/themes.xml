@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <style name="Theme.Mvi_pokedex" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.Mvi_pokedex" parent="android:Theme.Material.Light.NoActionBar">
+        <!--    DESACTIVAR SPLASH DE INICIO    -->
+        <item name="android:windowDisablePreview">true</item>
+    </style>
 </resources>
