@@ -85,7 +85,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun fetchPokemon() {
-        viewModelScope.launch() {
+        viewModelScope.launch {
             setState { copy(isLoading = true) }
             getPokemonListUsecase()
                 .catch { exception ->

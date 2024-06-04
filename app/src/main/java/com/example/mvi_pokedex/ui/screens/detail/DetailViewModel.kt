@@ -39,7 +39,7 @@ class DetailViewModel @Inject constructor(
 
     private fun getPokemonDetail(idPokemon: Int) {
 
-        viewModelScope.launch() {
+        viewModelScope.launch {
             setState { copy(isLoading = true) }
             getPokemonDetailUsecase(idPokemon)
                 .catch { exception ->

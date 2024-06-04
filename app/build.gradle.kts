@@ -3,7 +3,6 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     kotlin("kapt")
     alias(libs.plugins.dagger.hilt.android)
-    //alias(libs.plugins.devtools.ksp)
 }
 
 android {
@@ -95,9 +94,6 @@ dependencies {
 
     //Lottie
     implementation(libs.lottie.compose)
-
-    //Pager
-    implementation(libs.accompanist.pager)
 
 }
 

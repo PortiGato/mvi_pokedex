@@ -3,8 +3,6 @@ package com.example.mvi_pokedex.data.network.api
 
 import com.example.mvi_pokedex.data.network.response.PokemonDetailResponse
 import com.example.mvi_pokedex.data.network.response.PokemonListResponse
-import kotlinx.coroutines.flow.Flow
-import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

@@ -5,7 +5,7 @@ import com.example.mvi_pokedex.domain.model.Pokemon
 import com.example.mvi_pokedex.ui.base.BaseViewContract
 
 
-class HomeContract(): BaseViewContract() {
+class HomeContract: BaseViewContract() {
     //State of HomeScreen
     @Immutable
     data class HomeScreenState(
@@ -25,14 +25,14 @@ class HomeContract(): BaseViewContract() {
 
         data class ShowPokemonFilterItems(val pokemonFilterList: List<Pokemon>) : HomeScreenUiEvent()
         data class SortPokemonList(val sortOption: SortOption) : HomeScreenUiEvent()
-        object FetchPokemonList : HomeScreenUiEvent()
-        object DismissDialog : HomeScreenUiEvent()
-        object ShowDialog : HomeScreenUiEvent()
+        data object FetchPokemonList : HomeScreenUiEvent()
+        data object DismissDialog : HomeScreenUiEvent()
+        data object ShowDialog : HomeScreenUiEvent()
     }
 
 
     //Action
-    sealed class HomeUiAction: UiAction() {}
+    sealed class HomeUiAction: UiAction()
 
 }
 

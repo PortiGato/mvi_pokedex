@@ -9,7 +9,6 @@ import com.example.mvi_pokedex.data.network.service.PokemonDetailService
 import com.example.mvi_pokedex.data.network.service.PokemonListService
 import com.example.mvi_pokedex.utils.Constants.BASE_URL
 import com.example.mvi_pokedex.utils.Constants.TIMEOUT
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

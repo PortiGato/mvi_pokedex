@@ -5,7 +5,6 @@ import com.example.mvi_pokedex.data.network.response.PokemonDetailResponse
 import com.example.mvi_pokedex.data.network.response.Types
 import com.example.mvi_pokedex.utils.Constants
 import com.example.mvi_pokedex.utils.Utils.replaceFirstChar
-import java.util.*
 
 data class PokemonDetail(
     val id: Int,

@@ -5,7 +5,7 @@ import com.example.mvi_pokedex.domain.model.PokemonDetail
 import com.example.mvi_pokedex.ui.base.BaseViewContract
 
 
-class DetailContract(): BaseViewContract() {
+class DetailContract: BaseViewContract() {
 
     @Immutable
     data class DetailScreenState(
@@ -20,14 +20,12 @@ class DetailContract(): BaseViewContract() {
     sealed class DetailScreenUiEvent : UiEvent() {
         data class SetIDPokemon(val idPokemon: Int) : DetailScreenUiEvent()
         data class ShowPokemonDetail(val pokemonDetail: PokemonDetail) : DetailScreenUiEvent()
-        object DismissDialog : DetailScreenUiEvent()
-        object ShowDialog : DetailScreenUiEvent()
+        data object DismissDialog : DetailScreenUiEvent()
+        data object ShowDialog : DetailScreenUiEvent()
     }
 
 
     //Action
-    sealed class DetailUiAction: UiAction() {
-        data class ShowSnackbar(val msg: String) : DetailUiAction()
-    }
+    sealed class DetailUiAction: UiAction()
 
 }

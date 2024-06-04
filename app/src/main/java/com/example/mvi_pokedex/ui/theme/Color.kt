@@ -3,9 +3,6 @@ package com.example.mvi_pokedex.ui.theme
 import androidx.compose.ui.graphics.Color
 
 val BackgroundColor = Color(0xE1000000)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
-
 
 val HPColor = Color(0xFFF5FF00)
 val AtkColor = Color(1f, 0f, 0f, 0.66f)

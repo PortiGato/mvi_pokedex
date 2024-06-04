@@ -59,7 +59,7 @@ abstract class BaseViewModel<S, E, A> : ViewModel() {
     private val <T> MutableSharedFlow<T>.hasSubscribers: Boolean
         get() = subscriptionCount.value > 0
 
-    protected fun dispatchAction(action: A) {
+    private fun dispatchAction(action: A) {
         if (_actions.hasSubscribers) {
             _actions.tryEmit(action)
         } else {

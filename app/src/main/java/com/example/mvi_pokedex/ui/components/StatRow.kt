@@ -1,8 +1,8 @@
 package com.example.mvi_pokedex.ui.components
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -29,7 +29,7 @@ fun StatRow(
     progress: Int,
     progressColor: Color,
     progressBackgroundColor: Color = MaterialTheme.colorScheme.onBackground,
-    modifier: Modifier = Modifier
+    @SuppressLint("ModifierParameter") modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier

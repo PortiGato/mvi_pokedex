@@ -1,5 +1,6 @@
 package com.example.mvi_pokedex.ui.components
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -34,7 +35,7 @@ fun ClickableImage(
     contentDescription: String,
     onClick: () -> Unit = {},
     delay: Long = 1000,
-    modifier: Modifier = Modifier
+    @SuppressLint("ModifierParameter") modifier: Modifier = Modifier
 ) {
     var isFocused by remember { mutableStateOf(false) }
     var isClicked by remember { mutableStateOf(false) }
